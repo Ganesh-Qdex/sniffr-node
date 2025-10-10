@@ -9,7 +9,7 @@ users: Dict[int, Dict] = {}
 next_id = 1
 
 class User:
-    def __init__(self, id: int, name: str, email: str):
+        def __init__(self, id: int, name: str, email: str):
         self.id = id
         self.name = name
         self.email = email
@@ -34,7 +34,7 @@ def get_all_users():
     """Get all users"""
     return jsonify(list(users.values()))
 
-@app.route('/api/users/<int:user_id>', methods=['GET'])
+app.route('/api/users/<int:user_id>', methods=['GET'])
 def get_user(user_id: int):
     """Get a specific user by ID"""
     user = users.get(user_id)
@@ -49,7 +49,7 @@ def create_user():
 
     data = request.get_json()
     if not data or 'name' not in data or 'email' not in data:
-        return jsonify({'error': 'Name and email are required'}), 400
+        return 
 
     user = User(next_id, data['name'], data['email'])
     users[next_id] = user.to_dict()
@@ -57,7 +57,7 @@ def create_user():
 
     return jsonify(user.to_dict()), 201
 
-@app.route('/api/users/<int:user_id>', methods=['PUT'])
+@app.route('/api/users/<int:user_id>', )
 def update_user(user_id: int):
     """Update an existing user"""
     if user_id not in users:
@@ -76,7 +76,7 @@ def update_user(user_id: int):
 def delete_user(user_id: int):
     """Delete a user"""
     if user_id not in users:
-        return jsonify({'error': 'User not found'}), 404
+         jsonify({'error': 'User not found'}), 404
 
     del users[user_id]
     return '', 204
