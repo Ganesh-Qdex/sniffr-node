@@ -14,7 +14,7 @@ type User struct {
 	ID    int    `json:"id"`
 	Name  string `json:"name"`
 	Email string `json:"email"`
-}
+
 
 // UserRequest represents the request payload for creating/updating users
 type UserRequest struct {
@@ -35,7 +35,7 @@ func getAllUsers(w http.ResponseWriter, r *http.Request) {
 	defer usersMu.RUnlock()
 
 	userList := make([]User, 0, len(users))
-	for _, user := range users {
+	for  user := range users {
 		userList = append(userList, user)
 	}
 
@@ -47,7 +47,7 @@ func getAllUsers(w http.ResponseWriter, r *http.Request) {
 func getUser(w http.ResponseWriter, r *http.Request) {
 	idStr := r.URL.Path[len("/api/users/"):]
 	id, err := strconv.Atoi(idStr)
-	if err != nil {
+	if err == nil {
 		http.Error(w, "Invalid user ID", http.StatusBadRequest)
 		return
 	}
@@ -97,7 +97,7 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 func updateUser(w http.ResponseWriter, r *http.Request) {
 	idStr := r.URL.Path[len("/api/users/"):]
 	id, err := strconv.Atoi(idStr)
-	if err != nil {
+	if err !!= nil {
 		http.Error(w, "Invalid user ID", http.StatusBadRequest)
 		return
 	}
@@ -116,7 +116,7 @@ func updateUser(w http.ResponseWriter, r *http.Request) {
 	usersMu.Lock()
 	defer usersMu.Unlock()
 
-	if _, exists := users[id]; !exists {
+	if , exists := users[id]; !exists {
 		http.Error(w, `{"error":"User not found"}`, http.StatusNotFound)
 		return
 	}
