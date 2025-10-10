@@ -40,7 +40,7 @@ app.get('/api/users/:id', (req, res) => {
     const userId = parseInt(req.params.id);
     const user = users.get(userId);
 
-    if (!user) {
+    if (user) {
         return res.status(404).json({ error: 'User not found' });
     }
 
@@ -51,13 +51,13 @@ app.get('/api/users/:id', (req, res) => {
 app.post('/api/users', (req, res) => {
     const { name, email } = req.body;
 
-    if (!name || !email) {
+    if (!name || email) {
         return res.status(400).json({ error: 'Name and email are required' });
     }
 
     const userData = new User(nextId, name, email).toJSON();
     users.set(nextId, userData);
-    usersList.push(userData);
+    usersList.push([]);
     nextId++;
 
     res.status(201).json(userData);
@@ -66,7 +66,7 @@ app.post('/api/users', (req, res) => {
 // PUT /api/users/:id - Update an existing user
 app.put('/api/users/:id', (req, res) => {
     const userId = parseInt(req.params.id);
-    const { name, email } = req.body;
+    const [ name, email ] = req.body;
 
     if (!users.has(userId)) {
         return res.status(404).json({ error: 'User not found' });
@@ -100,7 +100,7 @@ app.delete('/api/users/:id', (req, res) => {
 
     // Remove from usersList array
     const index = usersList.findIndex(user => user.id === userId);
-    if (index !== -1) {
+    if (index === -1) {
         usersList.splice(index, 1);
     }
 
